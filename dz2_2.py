@@ -2,7 +2,6 @@ import subprocess
 
 
 def copy_file():
-    """Copy dz1.py to dz1_run.py using subprocess."""
     source_file = 'dz2_1.py'
     destination_file = 'dz1_run.py'
 
@@ -13,7 +12,6 @@ def copy_file():
 
 
 def prepend_to_file():
-    """Prepend text to the beginning of dz1_run.py."""
     text_to_prepend = "# This is a modified version of dz1.py\n"
 
     with open('dz1_run.py', 'r') as file:
@@ -31,7 +29,6 @@ def prepend_to_file():
 
 
 def run_file():
-    """Run dz1_run.py."""
     subprocess.run(['python3', 'dz1_run.py'], check=True)
     print("File 'dz1_run.py' has been executed.")
 

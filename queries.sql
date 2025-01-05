@@ -1,0 +1,65 @@
+CREATE TABLE Person (
+    Id SERIAL PRIMARY KEY,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    DogName VARCHAR(100),
+    Photo BYTEA
+);
+
+CREATE TABLE Course (
+    Id SERIAL PRIMARY KEY,
+    TeacherId INT NOT NULL REFERENCES Person(Id) ON DELETE CASCADE,
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
+    CONSTRAINT Course_Teacher_FK FOREIGN KEY (TeacherId) REFERENCES Person(Id)
+);
+
+CREATE TABLE Course_Student (
+    CourseId INT NOT NULL REFERENCES Course(Id) ON DELETE CASCADE,
+    StudentId INT NOT NULL REFERENCES Person(Id) ON DELETE CASCADE,
+    PRIMARY KEY (CourseId, StudentId)
+);
+
+CREATE TABLE Lesson (
+    Id SERIAL PRIMARY KEY,
+    CourseId INT NOT NULL REFERENCES Course(Id) ON DELETE CASCADE,
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT
+);
+
+CREATE TABLE Homework (
+    Id SERIAL PRIMARY KEY,
+    CourseId INT NOT NULL REFERENCES Course(Id) ON DELETE CASCADE,
+    Description TEXT NOT NULL,
+    MaxGrade INT NOT NULL
+);
+
+CREATE TABLE Homework_Response (
+    Id SERIAL PRIMARY KEY,
+    HomeworkId INT NOT NULL REFERENCES Homework(Id) ON DELETE CASCADE,
+    Description TEXT NOT NULL,
+    StudentId INT NOT NULL REFERENCES Person(Id) ON DELETE CASCADE,
+    Grade INT
+);
+
+ALTER TABLE Person
+    ADD COLUMN PhoneNumber VARCHAR(15);
+
+ALTER TABLE Person
+    DROP COLUMN DogName;
+
+CREATE TABLE Homework_Grade (
+    Id SERIAL PRIMARY KEY,
+    ResponseId INT NOT NULL REFERENCES Homework_Response(Id) ON DELETE CASCADE,
+    Date DATE NOT NULL,
+    Grade INT NOT NULL,
+    TeacherId INT NOT NULL REFERENCES Person(Id) ON DELETE CASCADE
+);
+
+ALTER TABLE Homework
+    ADD COLUMN Deadline DATE;
+
+ALTER TABLE Homework_Response
+    ADD COLUMN SubmissionDate DATE;
